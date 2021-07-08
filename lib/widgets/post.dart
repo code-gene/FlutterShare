@@ -50,6 +50,9 @@ class Post extends StatefulWidget {
     );
   }
 
+
+
+
   @override
   _PostState createState() => _PostState(
     postId: this.postId,

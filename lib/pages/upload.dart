@@ -24,6 +24,14 @@ class Upload extends StatefulWidget {
 
 class _UploadState extends State<Upload> {
 
+  @override
+  Widget build(BuildContext context) {
+    print('Upload');
+    print(widget.currentUser.id);
+
+    return file == null ? buildSplashScreen() : buildUploadForm();
+  }
+
   File file;
   bool isUploading = false;
   String postId = Uuid().v4();
@@ -296,10 +304,5 @@ class _UploadState extends State<Upload> {
     setState(() {
       file = null;
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return file == null ? buildSplashScreen() : buildUploadForm();
   }
 }

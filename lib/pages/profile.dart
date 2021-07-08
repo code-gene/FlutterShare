@@ -18,6 +18,9 @@ class Profile extends StatefulWidget {
   _ProfileState createState() => _ProfileState();
 }
 
+List followersList = [];
+List followingList = [];
+
 class _ProfileState extends State<Profile> {
 
   bool isFollowing = false;
@@ -32,6 +35,9 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
+    print('Inside Profile');
+    print(widget.profileId);
+    print('CurrentUserId: $currentUserId');
     getProfilePosts();
     getFollowers();
     getFollowing();
@@ -39,24 +45,24 @@ class _ProfileState extends State<Profile> {
   }
 
   getFollowing() async {
-    QuerySnapshot snapshot = await followingRef
-        .doc(widget.profileId)
-        .collection('userFollowing').get();
+    var snapshot = await followingRef
+        .doc(widget.profileId).get();
 
-    print(snapshot.docs);
+    followingList =snapshot['userFollowing'];
 
     setState(() {
-      followingCount = snapshot.docs.length;
+      followingCount = followingList.length;
     });
   }
 
   getFollowers() async {
-    QuerySnapshot snapshot = await followersRef
-      .doc(widget.profileId)
-      .collection('userFollowers').get();
+    var snapshot = await followersRef
+      .doc(widget.profileId).get();
+
+    followersList =snapshot['userFollowers'];
 
     setState(() {
-      followerCount = snapshot.docs.length;
+      followerCount = followersList.length;
     });
   }
 
@@ -85,6 +91,8 @@ class _ProfileState extends State<Profile> {
       isLoading = false;
       postCount = snapshot.docs.length;
       posts = snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
+      print("Profile Posts");
+      print(posts);
     });
   }
 
@@ -108,7 +116,7 @@ class _ProfileState extends State<Profile> {
 
   buildProfileHeader() {
     return FutureBuilder(
-      future: usersRef .doc(widget.profileId).get(),
+      future: usersRef.doc(widget.profileId).get(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return circularProgress();
@@ -276,13 +284,22 @@ class _ProfileState extends State<Profile> {
     setState(() {
       isFollowing = true;
     });
-    followersRef.doc(widget.profileId)
-      .collection('userFollowers')
-      .doc(currentUserId).set({});
 
-    followingRef.doc(currentUserId)
-      .collection('userFollowing')
-      .doc(widget.profileId).set({});
+    followersRef.doc(widget.profileId).set({
+      "userFollowers": FieldValue.arrayUnion([
+      currentUserId
+    ]),
+    }, SetOptions(merge: true));
+
+    followingRef.doc(currentUserId).set({
+      "userFollowing": FieldValue.arrayUnion([
+        widget.profileId
+      ]),
+    }, SetOptions(merge: true));
+
+    // followingRef.doc(currentUserId)
+    //   .collection('userFollowing')
+    //   .doc(widget.profileId).set({});
 
     activityFeedRef.doc(widget.profileId)
       .collection('feedItems')
@@ -300,13 +317,26 @@ class _ProfileState extends State<Profile> {
     setState(() {
       isFollowing = false;
     });
-    followersRef.doc(widget.profileId)
-        .collection('userFollowers')
-        .doc(currentUserId).delete();
 
-    followingRef.doc(currentUserId)
-        .collection('userFollowing')
-        .doc(widget.profileId).delete();
+    followersRef.doc(widget.profileId).set({
+      "userFollowers": FieldValue.arrayRemove([
+        widget.profileId
+      ]),
+    }, SetOptions(merge: true));
+
+    // followersRef.doc(widget.profileId)
+    //     .collection('userFollowers')
+    //     .doc(currentUserId).delete();
+    //
+    // followingRef.doc(currentUserId)
+    //     .collection('userFollowing')
+    //     .doc(widget.profileId).delete();
+
+    followingRef.doc(currentUserId).set({
+      "userFollowing": FieldValue.arrayRemove([
+        widget.profileId
+      ]),
+    }, SetOptions(merge: true));
 
     activityFeedRef.doc(widget.profileId)
         .collection('feedItems')

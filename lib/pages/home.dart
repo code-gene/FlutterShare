@@ -33,8 +33,8 @@ class _HomeState extends State<Home> {
 
   bool isAuth = false;
   PageController pageController;
-  int pageIndex = 0;
 
+  int pageIndex = 0;
   onPageChanged(int pageIndex) {
     setState(() {
       this.pageIndex = pageIndex;
@@ -67,7 +67,6 @@ class _HomeState extends State<Home> {
   }
 
   handleSignIn(GoogleSignInAccount account){
-    print('Account : $account');
     if(account != null) {
       createUserInFirestore();
       print('User signed in : $account');
@@ -93,12 +92,11 @@ class _HomeState extends State<Home> {
   }
 
   void createUserInFirestore() async{
+
     /* check if user exists in users.collection in database */
     final GoogleSignInAccount user = googleSignIn.currentUser;
     DocumentSnapshot doc  = await usersRef.doc(user.id).get();
 
-    print(user);
-    print(doc);
 
     /* If the user doesn't exist then we will create account */
     if(!doc.exists) {
@@ -106,6 +104,7 @@ class _HomeState extends State<Home> {
           context,
           MaterialPageRoute(builder: (context) => CreateAccount())
       );
+
       /* Create new user from userName in users collection */
       usersRef.doc(user.id).set({
         "id": user.id,
@@ -120,7 +119,7 @@ class _HomeState extends State<Home> {
     }
 
     currentUser = User.fromDocument(doc);
-    print(currentUser);
+    print('Create User in firestore : ${currentUser.id}');
   }
 
   @override
@@ -132,10 +131,10 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: PageView(
         children: [
-          Timeline(currentUser: currentUser),
-          ActivityFeed(),
-          Upload(currentUser: currentUser),
           Search(),
+          Timeline(),
+          Upload(currentUser: currentUser),
+          ActivityFeed(),
           Profile(profileId: currentUser?.id),
         ],
         controller: pageController,

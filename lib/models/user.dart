@@ -17,12 +17,12 @@ class User {
 
   factory User.fromDocument(doc) {
     return User(
-      id: doc['id'],
-      username: doc['username'],
-      email: doc['email'],
-      photoUrl: doc['photoUrl'],
-      displayName: doc['displayName'],
-      bio: doc['bio'],
+      id: doc.data()['id'],
+      username: doc.data()['username'],
+      email: doc.data()['email'],
+      photoUrl: doc.data()['photoUrl'],
+      displayName: doc.data()['displayName'],
+      bio: doc.data()['bio'],
     );
   }
 }

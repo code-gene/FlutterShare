@@ -79,7 +79,7 @@ class _SearchState extends State<Search>
             onPressed: clearSearch,
           ),
         ),
-        onFieldSubmitted: handleSearch,
+        onChanged: handleSearch,
       ),
     );
   }
