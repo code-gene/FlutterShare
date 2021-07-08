@@ -231,7 +231,7 @@ class _ProfileState extends State<Profile> {
   Container buildButton({String text, Function function}) {
     return Container(
       padding: EdgeInsets.only(top: 2.0),
-      child: FlatButton(
+      child: TextButton(
         onPressed: function,
         child:Container(
           width: 245,
@@ -300,17 +300,6 @@ class _ProfileState extends State<Profile> {
     // followingRef.doc(currentUserId)
     //   .collection('userFollowing')
     //   .doc(widget.profileId).set({});
-
-    activityFeedRef.doc(widget.profileId)
-      .collection('feedItems')
-      .doc(currentUserId).set({
-        "type": "follow",
-        "ownerId": widget.profileId,
-        "username": currentUser.username,
-        "userId": currentUserId,
-        "userPhotoUrl": currentUser.photoUrl,
-        "timestamp": timestamp,
-      });
   }
 
   handleUnfollowUser() {

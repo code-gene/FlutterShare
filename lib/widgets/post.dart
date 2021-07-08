@@ -99,9 +99,12 @@ class _PostState extends State<Post> {
         }
         User user = User.fromDocument(snapshot.data);
         return ListTile(
-          leading: CircleAvatar(
-            backgroundImage: CachedNetworkImageProvider(user.photoUrl),
-            backgroundColor: Colors.grey,
+          leading: GestureDetector(
+            onTap: () => showProfile(context, profileId: user.id),
+            child: CircleAvatar(
+              backgroundImage: CachedNetworkImageProvider(user.photoUrl),
+              backgroundColor: Colors.grey,
+            ),
           ),
           title: GestureDetector(
             onTap: () => showProfile(context, profileId: user.id),
@@ -171,7 +174,6 @@ class _PostState extends State<Post> {
       });
     }
   }
-
   addLikeToActivityFeed() {
     bool isNotPostOwner = currentUserId != ownerId;
     if(isNotPostOwner) {

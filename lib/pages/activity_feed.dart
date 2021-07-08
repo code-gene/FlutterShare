@@ -16,6 +16,8 @@ class ActivityFeed extends StatefulWidget {
 class _ActivityFeedState extends State<ActivityFeed> {
 
   getActivityFeed() async {
+    print(currentUser.id);
+
     QuerySnapshot snapshot = await activityFeedRef
       .doc(currentUser.id)
       .collection('feedItems')
@@ -27,11 +29,14 @@ class _ActivityFeedState extends State<ActivityFeed> {
     snapshot.docs.forEach((doc) {
       feedItems.add(ActivityFeedItem.fromDocument(doc));
     });
+    print("FeedItems");
+    print(feedItems);
     return feedItems;
   }
 
   @override
   Widget build(BuildContext context) {
+    print('Activity Feed');
     return Scaffold(
       appBar: header(context, titleText : 'Activity Feed'),
       body: Container(

@@ -148,13 +148,13 @@ class _HomeState extends State<Home> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.whatshot,
+              Icons.search,
               size: 25.0,
             ),
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.notifications_active,
+              Icons.whatshot,
               size: 25.0,
             ),
           ),
@@ -166,7 +166,7 @@ class _HomeState extends State<Home> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.search,
+              Icons.notifications_active,
               size: 25.0,
             ),
           ),

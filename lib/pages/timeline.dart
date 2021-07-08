@@ -73,7 +73,7 @@ class _TimelineState extends State<Timeline> {
     if(isLoading) {
       return circularProgress();
     }
-    else return Column(children: posts);
+    else return ListView(children: posts);
   }
 
   @override
